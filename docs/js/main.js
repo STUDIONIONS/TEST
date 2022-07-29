@@ -23,7 +23,7 @@ function openModal(date, el) {
 	clicked = date;
 	let str = String(arr[1]).padStart(2, "0") + "." + String(arr[0]).padStart(2, "0") + "." + String(arr[2]).padStart(4, "0"),
 		val = String(arr[2]).padStart(4, "0") + "-" + String(arr[0]).padStart(2, "0") + "-" + String(arr[1]).padStart(2, "0");
-	if (eventForDay!=null) {
+	if (eventForDay!=null && el) {
 		if(el.id){
 			let id = el.id.split('-')[2],
 				data = eventForDay[id];
