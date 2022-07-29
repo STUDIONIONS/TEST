@@ -1,6 +1,7 @@
 let nav = 0,
 	clicked = null,
 	events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : {};
+
 const calendar = document.getElementById('calendar'),
 	addEvent = document.getElementById('add'),
 	newEventModal = document.getElementById('newEventModal'),
@@ -56,7 +57,7 @@ function openModal(date, el) {
 	backDrop.style.display = 'flex';
 }
 
-function load() {
+function load(updt) {
 	const dt = new Date();
 	dt.setDate(1);
 	dt.setMonth(dt.getMonth() + nav);
@@ -73,61 +74,64 @@ function load() {
 		month: 'numeric',
 		day: 'numeric',
 	});
+
 	const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
 
 	document.getElementById('monthDisplay').innerText = 
 		`${dt.toLocaleDateString('ru-ru', { month: 'long' })} ${year}`;
 
 	calendar.innerHTML = '';
+	function calendarFn() {
+		for(let i = 1; i <= paddingDays + daysInMonth; i++) {
+			const daySquare = document.createElement('div');
+			daySquare.classList.add('day');
 
-	for(let i = 1; i <= paddingDays + daysInMonth; i++) {
-		const daySquare = document.createElement('div');
-		daySquare.classList.add('day');
+			const dayString = `${month + 1}/${i - paddingDays}/${year}`,
+				cl = 'd-' + dayString.split('/').join('');
 
-		const dayString = `${month + 1}/${i - paddingDays}/${year}`,
-			cl = 'd-' + dayString.split('/').join('');
-
-		if (i > paddingDays) {
-			//daySquare.innerText = i - paddingDays;
-			daySquare.setAttribute('data-curday', i - paddingDays);
-			const eventForDay = Array.isArray(events[cl]) ? events[cl] : null;
-			if (i - paddingDays === day && nav === 0) {
-				daySquare.id = 'currentDay';
-			}
-
-			if (eventForDay) {
-				if(Array.isArray(eventForDay)) {
-					daySquare.classList.add('events');
-					eventForDay.forEach(function(a, b, c) {
-						let eventDiv = document.createElement('div');
-						let eventDivWorker = document.createElement('div');
-						let div = document.createElement('div');
-						daySquare.appendChild(div);
-						eventDiv.classList.add('event');
-						eventDivWorker.classList.add('event');
-						eventDiv.innerText = a.title;
-						eventDivWorker.innerText = a.body;
-						div.appendChild(eventDiv);
-						div.appendChild(eventDivWorker);
-						div.classList.add('event_work');
-						div.title = `Ф.И.О: ${eventDivWorker.innerText}\nОписание: ${eventDiv.innerText}`;
-						div.id = cl + "-" + b
-					});
-					
+			if (i > paddingDays) {
+				//daySquare.innerText = i - paddingDays;
+				daySquare.setAttribute('data-curday', i - paddingDays);
+				const eventForDay = Array.isArray(events[cl]) ? events[cl] : null;
+				if (i - paddingDays === day && nav === 0) {
+					daySquare.id = 'currentDay';
 				}
-			}
-			daySquare.addEventListener('click', (e) => {
-				e.preventDefault();
-				clicked = dayString;
-				openModal(dayString, e.target);
-				return !1;
-			});
-		} else {
-			daySquare.classList.add('padding');
-		}
 
-		calendar.appendChild(daySquare);    
+				if (eventForDay) {
+					if(Array.isArray(eventForDay)) {
+						daySquare.classList.add('events');
+						eventForDay.forEach(function(a, b, c) {
+							let eventDiv = document.createElement('div');
+							let eventDivWorker = document.createElement('div');
+							let div = document.createElement('div');
+							daySquare.appendChild(div);
+							eventDiv.classList.add('event');
+							eventDivWorker.classList.add('event');
+							eventDiv.innerText = a.title;
+							eventDivWorker.innerText = a.body;
+							div.appendChild(eventDiv);
+							div.appendChild(eventDivWorker);
+							div.classList.add('event_work');
+							div.title = `Ф.И.О: ${eventDivWorker.innerText}\nОписание: ${eventDiv.innerText}`;
+							div.id = cl + "-" + b
+						});
+						
+					}
+				}
+				daySquare.addEventListener('click', (e) => {
+					e.preventDefault();
+					clicked = dayString;
+					openModal(dayString, e.target);
+					return !1;
+				});
+			} else {
+				daySquare.classList.add('padding');
+			}
+
+			calendar.appendChild(daySquare);    
+		}
 	}
+	updt ? setTimeout(calendarFn, 10) : calendarFn();
 }
 
 
@@ -194,21 +198,19 @@ function keyEnter(e){
 function initButtons() {
 	document.getElementById('nextButton').addEventListener('click', () => {
 		++nav;
-		console.log('next', nav);
-		load();
+		load(true);
 	});
 
 	document.getElementById('prevButton').addEventListener('click', () => {
 		--nav;
-		console.log('prev', nav);
-		load();
+		load(true);
 	});
 	today.forEach(function(a){
 		a.addEventListener('click', function(e) {
 			if(a.id != "update") {
 				nav = 0;
 			}
-			load();
+			load(true);
 		});
 	});
 	document.getElementById('saveButton').addEventListener('click', saveEvent);
@@ -232,3 +234,5 @@ function initButtons() {
 }
 
 initButtons();
+
+
