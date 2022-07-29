@@ -5,6 +5,7 @@ const calendar = document.getElementById('calendar'),
 	newEventModal = document.getElementById('newEventModal'),
 	deleteEventModal = document.getElementById('deleteEventModal'),
 	backDrop = document.getElementById('modalBackDrop'),
+	eventTitleDate = document.getElementById('eventTitleDate'),
 	eventTitleInput = document.getElementById('eventTitleInput'),
 	eventTitleWorker = document.getElementById('eventTitleWorker'),
 	today = document.querySelectorAll('.today'),
@@ -13,6 +14,7 @@ const calendar = document.getElementById('calendar'),
 function openModal(date, el) {
 	clicked = date;
 	const num = date.split('/').join(''),
+		dt = date.split('/').join('.'),
 		str = 'd-' + num,
 		eventForDay = events[str];
 	if (eventForDay) {
@@ -28,12 +30,14 @@ function openModal(date, el) {
 			newEventModal.style.display = 'block';
 			setTimeout(function(){
 				eventTitleInput.focus();
+				eventTitleDate.value = dt;
 			}, 0);
 		}
 	} else {
 		newEventModal.style.display = 'block';
 			setTimeout(function(){
 				eventTitleInput.focus();
+				eventTitleDate.value = dt;
 			}, 0);
 	}
 	backDrop.style.display = 'flex';
@@ -179,7 +183,7 @@ function initButtons() {
 		load();
 	});
 
-	document.getElementById('backButton').addEventListener('click', () => {
+	document.getElementById('prevButton').addEventListener('click', () => {
 		--nav;
 		console.log('prev', nav);
 		load();

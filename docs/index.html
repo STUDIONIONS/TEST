@@ -17,10 +17,10 @@
 						<input id="update" class="update today" type="button" value="Обновить">
 					</div>
 					<div class="header-top_search">
-						<img src="img/icon/search.svg" alt="search">
 						<input class="header-top_search-input" id="text-to-find" type="text" placeholder="События, даты или учасник">
-						<button onclick="highlight(header-top_search-input.value)"></button>
-
+						<button class="btn_normal btn_cube">
+							<img src="img/icon/search.svg" alt="search" class="btn_cube">
+						</button>
 					</div>
 				</div>
 			</div>
@@ -29,13 +29,13 @@
 		<div id="container">
 			<div id="header">
 				<div class="prevButton">
-					<button id="backButton"><img src="img/icon/caret-left.png" alt="prev"></button>
+					<button id="prevButton" class="btn_normal btn_cube"><img src="img/icon/caret-left.png" alt="prev"></button>
 				</div>
 			  <div id="monthDisplay"></div>
-			  <div>
-				<button id="nextButton"><img src="img/icon/caret-right.png" alt="next"></button>
+			  <div class="nextButton">
+				<button id="nextButton" class="btn_normal btn_cube"><img src="img/icon/caret-right.png" alt="next"></button>
 			  </div>
-			  <input id="today" type="button" class="today" value="Сегодня">
+			  <input id="today" type="button" class="today btn_normal" value="Сегодня">
 			</div>
 	  
 			<div id="weekdays">
@@ -54,9 +54,9 @@
 		<div id="modalBackDrop">
 			<div id="newEventModal">
 				<h2>Новое событие</h2>
-		  
-				<input id="eventTitleInput" placeholder="Описание события" />
-				<input id="eventTitleWorker" placeholder="ФИО Сотрудника" />
+		  		<input id="eventTitleDate" type="date" />
+				<input id="eventTitleInput" type="text" placeholder="Описание события" />
+				<input id="eventTitleWorker" type="text" placeholder="ФИО Сотрудника" />
 				<div class="modalBtn">
 					<button id="saveButton">Сохранить</button>
 					<button id="cancelButton">Закрыть</button>

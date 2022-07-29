@@ -18,6 +18,41 @@ body {
 button,
 [type=button]{
 	cursor: pointer;
+	padding: 9px 10px;
+	border: none;
+	outline: none;
+	padding: 5px;
+	border-radius: 3px;
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 5px 0 5px;
+	min-width: 26px;
+	transition: all .3s ease;
+	img {
+		transition: all .3s ease;
+		filter: opacity(0.5);
+	}
+	&:hover {
+		img {
+			filter: opacity(1);
+		}
+	}
+}
+
+.btn {
+	&_normal {
+		background-color: #f5f5f5;
+		box-shadow: 0px 0px 2px gray;
+		&:hover {
+			box-shadow: 0px 0px 2px black;
+			background-color: rgb(208, 208, 208);
+		}
+	}
+	&_cube {
+		aspect-ratio: 1 / 1;
+	}
 }
 
 .header-top {
@@ -51,32 +86,31 @@ button,
 
 .header-top_search{
 	display: flex;
-	img{
-		margin-right: 10px;
-		width: 12px;
-	}
+	align-items: center;
+	//img{
+	//	margin-right: 10px;
+	//	width: 12px;
+	//}
 	&-input{
-		padding: 5px 7px;
+		padding: 7px !important;
 		font-size: 70%;
 		width: 180px;
 		opacity: 0.5;
 		border: 1px solid #aeaeae;
+		&[type=text],
+		&[type=search] {
+			margin-bottom: 0px;
+		}
 	}
-}
-
-button {
-	width: 20px;
-	height: 20px;
-	box-shadow: 0px 0px 2px gray;
-	border: none;
-	outline: none;
-	padding: 5px;
-	border-radius: 3px;
-	color: white;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 0 5px 0 5px;
+	button {
+		text-align: center;
+		padding: 7px;
+		img {
+			width: 15px;
+			object-fit: contain;
+			object-position: center center;
+		}
+	}
 }
 
 #backButton:hover,
@@ -88,6 +122,8 @@ button {
 	color: #000;
 	text-transform: capitalize;
 	font-size: 20px;
+	text-align: center;
+	flex: 1;
 }
 	
 #header {
@@ -133,13 +169,13 @@ button {
 }
 
 #today {
-	height: 20px;
+	//height: 20px;
 	font-size: 14px;
-	box-shadow: 0px 0px 2px grey;
 	border: none;
 	border-radius: 3px;
+	color: #000000;
 	&:hover{
-		background-color: rgb(208, 208, 208);
+		color: #000000;
 	}
 }
 
@@ -208,6 +244,19 @@ button {
 		&:before {
 			background-color: #e8faed;
 		}
+		&::-webkit-scrollbar {
+			height: 4px;
+			width: 5px;
+			border: 1px solid #96c4e7;
+		}
+		&::-webkit-scrollbar-thumb {
+			background: #96c4e7;
+			border-radius: 3px;
+		}
+		&::-webkit-scrollbar-corner {
+			background-color: #96c4e7;
+			border-radius: 3px;
+		}
 	}
 	&:hover {
 		background-color: #e8faed;
@@ -254,21 +303,8 @@ button {
 	}
 }
 
-#eventTitleInput {
-	padding: 10px;
-	width: 100%;
-	box-sizing: border-box;
-	margin-bottom: 25px;
-	border-radius: 3px;
-	outline: none;
-	border: none;
-	box-shadow: 0px 0px 3px gray;
-	&.error {
-		border: 2px solid red;
-	}
-}
-
-#eventTitleWorker {
+input[type=text],
+input[type=date] {
 	padding: 10px;
 	width: 100%;
 	box-sizing: border-box;
