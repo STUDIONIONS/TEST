@@ -1,10 +1,13 @@
 let nav = 0,
 	clicked = null,
-	events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : [];
+	events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : {};
 const calendar = document.getElementById('calendar'),
+	addEvent = document.getElementById('add'),
 	newEventModal = document.getElementById('newEventModal'),
 	deleteEventModal = document.getElementById('deleteEventModal'),
 	backDrop = document.getElementById('modalBackDrop'),
+	titleDate0 = document.getElementById('titleDate0'),
+	titleDate1 = document.getElementById('titleDate1'),
 	eventTitleDate = document.getElementById('eventTitleDate'),
 	eventTitleInput = document.getElementById('eventTitleInput'),
 	eventTitleWorker = document.getElementById('eventTitleWorker'),
@@ -12,32 +15,42 @@ const calendar = document.getElementById('calendar'),
 	weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function openModal(date, el) {
+	const vr = clicked == date ? true : false;
+	const arr = date.split('/'),
+		num = arr.join(''),
+		dt = arr.join('-'),
+		eventForDay = events['d-' + num];
 	clicked = date;
-	const num = date.split('/').join(''),
-		dt = date.split('/').join('.'),
-		str = 'd-' + num,
-		eventForDay = events[str];
-	if (eventForDay) {
+	let str = String(arr[1]).padStart(2, "0") + "." + String(arr[0]).padStart(2, "0") + "." + String(arr[2]).padStart(4, "0"),
+		val = String(arr[2]).padStart(4, "0") + "-" + String(arr[0]).padStart(2, "0") + "-" + String(arr[1]).padStart(2, "0");
+	if (eventForDay!=null) {
 		if(el.id){
 			let id = el.id.split('-')[2],
 				data = eventForDay[id];
 			document.getElementById('eventText').innerText = data.title;
 			document.getElementById('eventWorker').innerText = data.body;
+			titleDate1.innerText = str;
 			deleteEventModal.setAttribute('data-edit', id);
-			deleteEventModal.setAttribute('data-date', str);
+			deleteEventModal.setAttribute('data-date', num);
 			deleteEventModal.style.display = 'block';
 		}else{
 			newEventModal.style.display = 'block';
+			titleDate0.innerText = str;
+			eventTitleDate.style.display = vr ? 'block' : 'none';
+			titleDate0.style.display = vr ? 'none' : 'block';
 			setTimeout(function(){
 				eventTitleInput.focus();
-				eventTitleDate.value = dt;
+				eventTitleDate.value = val;
 			}, 0);
 		}
 	} else {
 		newEventModal.style.display = 'block';
+		titleDate0.innerText = str;
+		eventTitleDate.style.display = vr ? 'none' : 'block';
+		titleDate0.style.display = vr ? 'block' : 'none';
 			setTimeout(function(){
 				eventTitleInput.focus();
-				eventTitleDate.value = dt;
+				eventTitleDate.value = val;
 			}, 0);
 	}
 	backDrop.style.display = 'flex';
@@ -105,6 +118,7 @@ function load() {
 			}
 			daySquare.addEventListener('click', (e) => {
 				e.preventDefault();
+				clicked = dayString;
 				openModal(dayString, e.target);
 				return !1;
 			});
@@ -158,10 +172,11 @@ function saveEvent() {
 
 function deleteEvent() {
 	let del = deleteEventModal.getAttribute('data-edit'),
-		date = deleteEventModal.getAttribute('data-date');
-	events[date].splice(del, 1);
-	if(!events[date].length){
-		delete events[date];
+		date = deleteEventModal.getAttribute('data-date'),
+		key = 'd-' + date;
+	events[key].splice(del, 1);
+	if(!events[key].length){
+		delete events[key];
 	}
 	localStorage.setItem('events', JSON.stringify(events));
 	load();
@@ -202,6 +217,17 @@ function initButtons() {
 	document.getElementById('closeButton').addEventListener('click', closeModal);
 	eventTitleInput.addEventListener('keydown', keyEnter);
 	eventTitleWorker.addEventListener('keydown', keyEnter);
+	addEvent.addEventListener('click', (e) => {
+		e.preventDefault();
+		let date = new Date(),
+			d = date.getDate(),
+			m = date.getMonth(),
+			y = date.getFullYear(),
+			s = `${m + 1}/${d}/${y}`;
+		clicked = null;
+		openModal(s);
+		return !1;
+	});
 	load();
 }
 
