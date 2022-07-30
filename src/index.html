@@ -13,12 +13,12 @@
 				<div id="container">
 					<div class="header-top">
 						<div class="header-top_btn">
-							<input id="add" class="add" type="button" value="Добавить">
-							<input id="update" class="update today" type="button" value="Обновить">
+							<input id="add" class="add btn btn_blue" type="button" value="Добавить">
+							<input id="update" class="update today btn btn_blue" type="button" value="Обновить">
 						</div>
 						<div class="header-top_search">
 							<input class="header-top_search-input" id="text-to-find" type="text" placeholder="События, даты или учасник">
-							<button class="btn_normal btn_cube">
+							<button class="btn_normal btn btn_cube">
 								<img src="images/icon/search.svg" alt="search" class="btn_cube">
 							</button>
 						</div>
@@ -30,13 +30,13 @@
 		<div id="container">
 			<div id="header">
 				<div class="prevButton">
-					<button id="prevButton" class="btn_normal btn_cube"><img src="images/icon/caret-left.png" alt="prev"></button>
+					<button id="prevButton" class="btn_normal btn btn_cube"><img src="images/icon/caret-left.png" alt="prev"></button>
 				</div>
 			  <div id="monthDisplay"></div>
 			  <div class="nextButton">
-				<button id="nextButton" class="btn_normal btn_cube"><img src="images/icon/caret-right.png" alt="next"></button>
+				<button id="nextButton" class="btn_normal btn btn_cube"><img src="images/icon/caret-right.png" alt="next"></button>
 			  </div>
-			  <input id="today" type="button" class="today btn_normal" value="Сегодня">
+			  <input id="today" type="button" class="today btn btn_normal" value="Сегодня">
 			</div>
 			<div id="weekdays">
 				<div>Понедельник</div>
@@ -58,8 +58,8 @@
 				<input id="eventTitleInput" type="text" placeholder="Описание события" />
 				<input id="eventTitleWorker" type="text" placeholder="ФИО Сотрудника" />
 				<div class="modalBtn">
-					<button id="saveButton">Сохранить</button>
-					<button id="cancelButton">Закрыть</button>
+					<button id="saveButton" class="btn btn_red">Сохранить</button>
+					<button id="cancelButton" class="btn btn_blue">Закрыть</button>
 				</div>
 			</div>
 			<div id="deleteEventModal">
@@ -68,8 +68,8 @@
 				<p id="eventText"></p>
 				<p id="eventWorker"></p>
 				<div class="modalBtn">
-					<button id="deleteButton">Удалить</button>
-					<button id="closeButton">Закрыть</button>
+					<button id="deleteButton" class="btn btn_red">Удалить</button>
+					<button id="closeButton" class="btn btn_blue">Закрыть</button>
 				</div>
 			</div>
 	  	</div>
