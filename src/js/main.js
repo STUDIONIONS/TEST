@@ -1,7 +1,7 @@
 /**
  * Calendar Events
 **/
-(function(){
+//(function(){
 	let nav = 0,
 		clicked = null,
 		events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : {};
@@ -17,6 +17,7 @@
 		eventTitleInput = document.getElementById('eventTitleInput'),
 		eventTitleWorker = document.getElementById('eventTitleWorker'),
 		today = document.querySelectorAll('.today'),
+		findText = document.getElementById('text-to-find'),
 		weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 	function openModal(date, el) {
@@ -125,6 +126,7 @@
 					if (eventForDay) {
 						if (Array.isArray(eventForDay)) {
 							daySquare.classList.add('events');
+							daySquare.id = cl;
 							eventForDay.forEach(function(a, b, c) {
 								let eventDiv = document.createElement('div'),
 									eventDivWorker = document.createElement('div'),
@@ -171,6 +173,8 @@
 					calendar.appendChild(daySquare); 
 				}
 			}
+			let event = new Event("keyup");
+  			findText.dispatchEvent(event);
 		}
 		updt ? setTimeout(calendarFn, 10) : calendarFn();
 	}
@@ -271,9 +275,14 @@
 			openModal(s);
 			return !1;
 		});
+		findText.addEventListener('keyup', function(e){
+			e.preventDefault();
+			search(this.value);
+			return !1;
+		})
 		load();
 	}
 
 	initButtons();
 
-})();
+//})();

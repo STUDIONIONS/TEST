@@ -41,26 +41,6 @@ button {
 	transition: all .3s ease;
 	padding: 7px 10px;
 }
-/*
-#cancelButton,
-#deleteButton {
-	background-color: #d94545;
-	width: 90px;
-	height: 30px;
-	&:hover {
-		background-color: #c98181;
-	}
-}*/
-
-/*#saveButton,
-#closeButton {
-	background-color: #006fca;
-	width: 90px;
-	height: 30px;
-	&:hover {
-		background-color: #3680bd;
-	}
-}*/
 
 .btn {
 	user-select: none;
@@ -117,7 +97,6 @@ button {
 	&-bg {
 		display: flex;
 		justify-content: space-between;
-		height: 80px;
 		flex-direction: row;
 		background-color: #f5f5f5;
 		box-shadow: 0px 6px 10px 0px rgb(215 211 211 / 50%);
@@ -126,8 +105,8 @@ button {
 		display: flex;
 		justify-content: space-between;
 		align-items: end;
-		height: 80px;
 		padding-bottom: 15px;
+		padding-top: 15px;
 		flex-direction: row;
 		background-color: #f5f5f5;
 		&_btn {
@@ -138,6 +117,9 @@ button {
 				margin-right: 5px;
 				font-size: 12px;
 				font-weight: bold;
+				&:first-child {
+					margin-left: unset;
+				}
 			}
 		}
 		@media (max-width: 425px) {
@@ -145,8 +127,19 @@ button {
 			aligin-items: center;
 			justify-content: center;
 			&_btn {
-				margin-top: 15px;
+				margin-top: 10px;
+				margin-bottom: 10px;
 				justify-content: space-between;
+				input {
+					margin-left: unset;
+					margin-right: unset;
+				}
+				/*&::before,
+				&::after {
+					content: "";
+					display: table;
+					clear: both;
+				}*/
 			}
 			&_btn,
 			&_search {
@@ -174,10 +167,6 @@ button {
 .header-top_search{
 	display: flex;
 	align-items: center;
-	//img{
-	//  margin-right: 10px;
-	//  width: 12px;
-	//}
 	&-input{
 		padding: 7px !important;
 		font-size: 70%;
@@ -188,33 +177,35 @@ button {
 			margin-bottom: 0px;
 		}
 	}
-	button {
-		text-align: center;
-		padding: 7px;
-		img {
-			width: 15px;
-			object-fit: contain;
-			object-position: center center;
-		}
-	}
 }
 
-#backButton:hover,
+#prevButton:hover,
 #nextButton:hover {
 	background-color: rgb(208, 208, 208);
+}
+
+#prevButton {
+	margin-left: unset;
+}
+
+#nextButton {
+	@media(max-width: 425px) {
+		margin-right: unset;
+	}
 }
 
 #monthDisplay{
 	color: #000;
 	text-transform: capitalize;
 	font-size: 20px;
+	font-weight: 900;
 	text-align: center;
 	flex: 1;
 	user-select: none;
 }
 	
 #header {
-	padding: 30px 0;
+	padding: 10px 0;
 	color: #d36c6c;
 	font-size: 26px;
 	font-family: sans-serif;
@@ -264,10 +255,10 @@ button {
 }
 
 #today {
-	//height: 20px;
 	font-size: 14px;
 	border: none;
 	border-radius: 3px;
+	margin-right: unset;
 }
 
 #calendar {
@@ -279,23 +270,21 @@ button {
 }
 
 .month-calendar {
-	//box-shadow: inset 0 7px 10px -10px rgba(0, 0, 0, .5);
 	width: 100%;
 }
 
 .event {
-	font-size: 10px;
+	font-weight: bold;
+	background-color: #c2e4fe;
+	color: #000;
 	padding-left: 3px;
 	padding-right: 3px;
 	overflow: hidden;
-	width: 100%;
 	text-transform: capitalize;
-	font-weight: bold;
-	background-color: #c2e4fe;
 	pointer-events: none;
-	color: #000;
 	text-overflow: ellipsis;
 	overflow: hidden;
+	width: 100%;
 	&:first-child {
 		padding-top: 3px;
 	}
@@ -306,38 +295,42 @@ button {
 }
 
 .day {
-	width: 90px;
-	flex: 0 0 calc(100% / 7);
-	padding: 5px;
-	padding-top: 0;
-	//height: 100px;
+	aspect-ratio: 1;
+	font-size: 10px;
+	color: #999;
 	cursor: pointer;
 	box-sizing: border-box;
 	background-color: white;
 	box-shadow: 0px 0px 3px #CBD4C2;
 	border: 1px solid #d3d3d3;
 	display: flex;
+	flex: 0 0 calc(100% / 7);
 	flex-direction: column;
 	justify-content: flex-start;
-	font-size: 12px;
-	color: #999;
+	padding: 5px;
+	padding-top: 0;
 	position: relative;
-	aspect-ratio: 1;
+	width: 90px;
+	white-space: nowrap;
+	transition: background .3s ease, box-shadow .3s ease;
 	&::before {
+		font-size: 11px;
 		content: attr(data-curday);
 		display: block;
 		top: 0px;
 		position: sticky;
-		z-index: 1;
 		margin-left: -5px;
 		margin-right: -5px;
 		padding-top: 3px;
-		padding-left: 5px;
-		padding-right: 5px;
+		padding-left: 7px;
+		padding-right: 7px;
+		padding-bottom: 3px;
+		z-index: 1;
 	}
-	&:nth-child(7n-1),
-	&:nth-child(7n) {
-		background-color: #f9e8e8;
+	+ .current_day {
+		&:empty {
+			background-color: #e8faed;
+		}
 	}
 	&.events {
 		background-color: #c2e4fe;
@@ -362,16 +355,15 @@ button {
 	}
 	&:hover,
 	+ .current_day {
-		background-color: #e8faed;
-	}
-
-	+ .current_day {
 		box-shadow: 0 0 1px 1px #0098ff;
 		z-index: 2;
 	}
+	&:hover {
+		background-color: #e8faed;
+	}
 	> div {
-		//min-height: calc(100% - 12px);
 		position: relative;
+		margin-top: 1px;
 		margin-bottom: 2px;
 		&:last-child {
 			margin-bottom: unset;
@@ -383,6 +375,9 @@ button {
 			cursor: default;
 			background-color: #f5f5f5;
 		}
+	}
+	.red {
+		box-shadow: 0 0 0 1px red;
 	}
 	@media (max-width: 780px) {
 		aspect-ratio: unset;

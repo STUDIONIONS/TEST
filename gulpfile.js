@@ -8,13 +8,24 @@ var gulp = require('gulp'),
 	cssmin = require('gulp-cssmin'),
 	htmlmin = require('gulp-htmlmin'),
 	copyFiles = require('gulp-copy'),
-	through = require('through2');
+	through = require('through2'),
+	debug = require('gulp-debug'),
+	tildify = require('tildify'),
+	chalk = require('chalk'),
+	plur = require('plur'),
+	logger = require('fancy-log'),
+	stringifyObject = require('stringify-object');
 
+const prop = chalk.cyan;
+
+
+//logger(prop(stringifyObject(chalk)));
 gulp.task('sass', function () {
   return gulp.src([
   		'node_modules/normalize.css/normalize.css',
   		"src/scss/style.scss"
   	])
+  	.pipe(debug())
   	.pipe(concat('main.scss'))
 	.pipe(sass({outputStyle: 'compressed' })) //compressed-минифицирует код
 	.pipe(rename({suffix: '.min' })) //переименовывает css
@@ -27,16 +38,25 @@ gulp.task('sass', function () {
 
 gulp.task('html', function(){
 	return gulp.src('src/*.html')
+		.pipe(debug())
 		.pipe(htmlmin({ collapseWhitespace: true }))
 		.pipe(gulp.dest('docs'))
 		.pipe(browserSync.reload({stream: true}))
 });
 
 gulp.task('js', function(){
-	gulp.src(['src/js/main.js'])
+	gulp.src([
+		'src/js/search.js',
+		'src/js/main.js'
+	])
+		.pipe(debug())
 		.pipe(concat('test.js'))
 		.pipe(gulp.dest('docs/js'));
-	return gulp.src(['src/js/main.js'])
+	return gulp.src([
+		'src/js/search.js',
+		'src/js/main.js'
+	])
+		.pipe(debug())
 		.pipe(concat('main.min.js'))
 		.pipe(uglify())
 		.pipe(gulp.dest('docs/js'))
@@ -49,6 +69,7 @@ gulp.task('copy', function(){
 			'src/img/*.*',
 			'src/img/icon/*.*'
 		])
+		.pipe(debug())
 		.pipe(copyFiles('docs/images/', {prefix: 2}))
 		 .pipe(verify());
 })
@@ -64,7 +85,7 @@ gulp.task('browser-sync', function() {
 gulp.task('watch', function(){
 	gulp.watch('src/scss/style.scss', gulp.parallel('sass', 'html', 'js'));  //строка следит за scss и запускакт параллельно плагин sass
 	gulp.watch('src/*.html', gulp.parallel('sass', 'html', 'js'));
-	gulp.watch('src/js/main.js', gulp.parallel('sass', 'html', 'js'));
+	gulp.watch('src/js/*.js', gulp.parallel('sass', 'html', 'js'));
 	gulp.watch('src/img/icon/*.*', gulp.parallel('sass', 'html', 'js', 'copy'));
 	gulp.watch('src/img/*.*', gulp.parallel('sass', 'html', 'js', 'copy'));
 });
@@ -76,12 +97,12 @@ function verify() {
 	return through(options, write, end);
 
 	function write(file, enc, cb) {
-		console.log('file', file.path);
+		logger('Copy to file: ' + prop(tildify(file.path)));
 		cb(null, file);
 	}
 
 	function end(cb) {
-		console.log('done');
+		logger(prop(tildify('done')));
 		cb();
 	}
 }
