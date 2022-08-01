@@ -59,15 +59,17 @@ gulp.task('html', function(){
 
 gulp.task('js', function(){
 	gulp.src([
-			'src/js/main.js',
+			'src/js/events.js',
 			'src/js/search.js',
+			'src/js/main.js',
 		])
 		.pipe(debug())
 		.pipe(concat('test.js'))
 		.pipe(gulp.dest('docs/js'));
 	return gulp.src([
-			'src/js/main.js',
+			'src/js/events.js',
 			'src/js/search.js',
+			'src/js/main.js',
 		])
 		.pipe(debug())
 		.pipe(concat('main.min.js'))

@@ -1,0 +1,1 @@
+window.events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : {};

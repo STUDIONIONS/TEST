@@ -1,10 +1,9 @@
 /**
  * Calendar Events
 **/
-(function(){
+;!(function(){
 	let nav = 0,
 		clicked = null;
-	window.events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : {};
 
 	const calendar = document.getElementById('calendar'),
 		addEvent = document.getElementById('add'),
