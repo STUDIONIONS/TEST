@@ -7,6 +7,8 @@ var gulp = require('gulp'),
 	uglify = require('gulp-uglify'),
 	cssmin = require('gulp-cssmin'),
 	htmlmin = require('gulp-htmlmin'),
+	ttf2woff = require('gulp-ttf2woff'),
+	ttf2woff2 = require('gulp-ttf2woff2'),
 	copyFiles = require('gulp-copy'),
 	through = require('through2'),
 	debug = require('gulp-debug'),
@@ -16,12 +18,25 @@ var gulp = require('gulp'),
 	logger = require('fancy-log'),
 	stringifyObject = require('stringify-object');
 
-const prop = chalk.cyan;
+const prop = chalk.cyan,
+	verify = function () {
+		var options = { objectMode: true };
+		return through(options, write, end);
 
+		function write(file, enc, cb) {
+			logger('Copy to file: ' + prop(tildify(file.path)));
+			cb(null, file);
+		}
 
-//logger(prop(stringifyObject(chalk)));
+		function end(cb) {
+			logger(prop(tildify('done')));
+			cb();
+		}
+	};
+
 gulp.task('sass', function () {
   return gulp.src([
+  		'src/scss/fonts.scss',
   		'node_modules/normalize.css/normalize.css',
   		"src/scss/style.scss"
   	])
@@ -33,7 +48,6 @@ gulp.task('sass', function () {
 		overrideBrowserslist: ['last 8 versions']
 	}))
 	.pipe(gulp.dest("docs/css"))
-	.pipe(browserSync.reload({stream: true}))
 });
 
 gulp.task('html', function(){
@@ -41,26 +55,49 @@ gulp.task('html', function(){
 		.pipe(debug())
 		.pipe(htmlmin({ collapseWhitespace: true }))
 		.pipe(gulp.dest('docs'))
-		.pipe(browserSync.reload({stream: true}))
 });
 
 gulp.task('js', function(){
 	gulp.src([
-		'src/js/search.js',
-		'src/js/main.js'
-	])
+			'src/js/main.js',
+			'src/js/search.js',
+		])
 		.pipe(debug())
 		.pipe(concat('test.js'))
 		.pipe(gulp.dest('docs/js'));
 	return gulp.src([
-		'src/js/search.js',
-		'src/js/main.js'
-	])
+			'src/js/main.js',
+			'src/js/search.js',
+		])
 		.pipe(debug())
 		.pipe(concat('main.min.js'))
 		.pipe(uglify())
 		.pipe(gulp.dest('docs/js'))
-		.pipe(browserSync.reload({stream: true}))
+});
+
+gulp.task('ttf2woff', function(){
+	return gulp.src(['src/fonts/*.ttf'])
+		.pipe(debug())
+    	.pipe(ttf2woff())
+    	.pipe(gulp.dest('docs/fonts/'));
+});
+
+gulp.task('ttf2woff2', function(){
+	return gulp.src(['src/fonts/*.ttf'])
+		.pipe(debug())
+		.pipe(ttf2woff2())
+		.pipe(gulp.dest('docs/fonts/'));
+});
+
+gulp.task('copyFonts', function(){
+	return gulp
+		.src([
+			'src/fonts/*.ttf'
+		])
+		.pipe(debug())
+		.pipe(copyFiles('docs/fonts/', {prefix: 2}))
+		.pipe(verify())
+		.pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('copy', function(){
@@ -71,7 +108,7 @@ gulp.task('copy', function(){
 		])
 		.pipe(debug())
 		.pipe(copyFiles('docs/images/', {prefix: 2}))
-		 .pipe(verify());
+		.pipe(verify());
 })
 
 gulp.task('browser-sync', function() {
@@ -83,26 +120,11 @@ gulp.task('browser-sync', function() {
 });
 
 gulp.task('watch', function(){
-	gulp.watch('src/scss/style.scss', gulp.parallel('sass', 'html', 'js'));  //строка следит за scss и запускакт параллельно плагин sass
-	gulp.watch('src/*.html', gulp.parallel('sass', 'html', 'js'));
-	gulp.watch('src/js/*.js', gulp.parallel('sass', 'html', 'js'));
-	gulp.watch('src/img/icon/*.*', gulp.parallel('sass', 'html', 'js', 'copy'));
-	gulp.watch('src/img/*.*', gulp.parallel('sass', 'html', 'js', 'copy'));
+	gulp.watch('src/scss/style.scss', gulp.parallel('sass', 'html', 'js', 'copy', 'copyFonts'));
+	gulp.watch('src/*.html', gulp.parallel('sass', 'html', 'js', 'copy', 'copyFonts'));
+	gulp.watch('src/js/*.js', gulp.parallel('sass', 'html', 'js', 'copy', 'copyFonts'));
+	gulp.watch('src/img/icon/*.*', gulp.parallel('sass', 'html', 'js', 'copy', 'copyFonts'));
+	gulp.watch('src/img/*.*', gulp.parallel('sass', 'html', 'js', 'copy', 'copyFonts'));
 });
 
-gulp.task('default', gulp.parallel('sass', 'html', 'js', 'copy', 'watch', 'browser-sync'))
-
-function verify() {
-	var options = { objectMode: true };
-	return through(options, write, end);
-
-	function write(file, enc, cb) {
-		logger('Copy to file: ' + prop(tildify(file.path)));
-		cb(null, file);
-	}
-
-	function end(cb) {
-		logger(prop(tildify('done')));
-		cb();
-	}
-}
+gulp.task('default', gulp.parallel('ttf2woff', 'ttf2woff2', 'sass', 'html', 'js', 'copy', 'copyFonts', 'watch', 'browser-sync'))
