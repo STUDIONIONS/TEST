@@ -122,11 +122,17 @@ gulp.task('browser-sync', function() {
 });
 
 gulp.task('watch', function(){
-	gulp.watch('src/scss/style.scss', gulp.parallel('sass', 'html', 'js', 'copy', 'copyFonts'));
-	gulp.watch('src/*.html', gulp.parallel('sass', 'html', 'js', 'copy', 'copyFonts'));
-	gulp.watch('src/js/*.js', gulp.parallel('sass', 'html', 'js', 'copy', 'copyFonts'));
-	gulp.watch('src/img/icon/*.*', gulp.parallel('sass', 'html', 'js', 'copy', 'copyFonts'));
-	gulp.watch('src/img/*.*', gulp.parallel('sass', 'html', 'js', 'copy', 'copyFonts'));
+	gulp.watch(
+		[
+			'src/scss/style.scss',
+			'src/*.html',
+			'src/js/*.js',
+			'src/img/icon/*.*',
+			'src/img/*.*'
+		],
+		gulp.series('sass', 'html', 'js', 'copy', 'copyFonts')
+	);
 });
 
-gulp.task('default', gulp.parallel('ttf2woff', 'ttf2woff2', 'sass', 'html', 'js', 'copy', 'copyFonts', 'watch', 'browser-sync'))
+gulp.task('default', gulp.series('ttf2woff', 'ttf2woff2', 'sass', 'html', 'js', 'copy', 'copyFonts', gulp.parallel('browser-sync', 'watch')));
+gulp.task('dev', gulp.parallel('browser-sync', 'watch'));
